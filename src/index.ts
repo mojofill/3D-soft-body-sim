@@ -36,7 +36,7 @@ const time = {
 };
 
 let pause = false;
-const ground_width = 100;
+const ground_width = 5;
 
 const keys = {
     w: false,
@@ -89,16 +89,16 @@ function addLighting() {
 }
 
 function addAllInitialObjects() {
-    const width = 5;
-    const height = 5;
-    const depth = 5;
+    const ball_radius = 0.5;
+    const width = 10;
+    const height = 1;
+    const depth = 10;
     const mass = 1;
     const start_v = new THREE.Vector3();
-    const start_x = -15;
-    const start_y = 20;
-    const start_z = -15;
     const dist = 2;
-    const ball_radius = 0.5;
+    const start_x = -width/2 * dist - ball_radius;
+    const start_y = 20;
+    const start_z = -depth/2 * dist - ball_radius;
 
     const ball_arr: Ball[][][] = [];
 
