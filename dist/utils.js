@@ -7,11 +7,11 @@ exports.safeVectorMultiplyScalar = safeVectorMultiplyScalar;
 exports.safeVectorDotProduct = safeVectorDotProduct;
 exports.safeVectorDivideScalar = safeVectorDivideScalar;
 const three_1 = require("three");
-exports.g = 5;
+exports.g = 10;
 exports.camera_speed = 30;
 exports.dt = 0.01;
 exports.k = 500;
-exports.c = 5;
+exports.c = 10;
 function boxAndBallCollisionDetect(box, ball) {
     // TODO -- it should be similar to the 2d rect and circle collision detect
     // basically, check extend the box in all three axis by r. 

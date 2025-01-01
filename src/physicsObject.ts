@@ -70,8 +70,7 @@ export default abstract class PhysicsObject {
                     // just reverse y velocity and call it a day bro. "teleport" it just above the box so that it wont get clipped in
 
                     if (!this.radius) throw new Error("this for typescript reasons. honestly, i can probably make this better, but rn i cant be bothered to figure out a way to do so.");
-                    if (this.name === "BAD BOY") console.log("UH OH");
-                    this.setY(obj.y + obj.bbox.max.y + this.radius + 0.01); // give it some allowance
+                    this.setY(obj.y + obj.bbox.max.y + this.radius + 0.1); // give it some allowance
                     this.v.y *= -1;
                 }
             }

@@ -37457,11 +37457,11 @@ void main() {
       exports.safeVectorDotProduct = safeVectorDotProduct;
       exports.safeVectorDivideScalar = safeVectorDivideScalar;
       var three_1 = require_three();
-      exports.g = 5;
+      exports.g = 10;
       exports.camera_speed = 30;
       exports.dt = 0.01;
       exports.k = 500;
-      exports.c = 5;
+      exports.c = 10;
       function boxAndBallCollisionDetect(box, ball) {
         const bbox = new three_1.Box3();
         if (!box.objectMesh.geometry.boundingBox)
@@ -37554,9 +37554,7 @@ void main() {
               if ((0, utils_1.boxAndBallCollisionDetect)(obj, this)) {
                 if (!this.radius)
                   throw new Error("this for typescript reasons. honestly, i can probably make this better, but rn i cant be bothered to figure out a way to do so.");
-                if (this.name === "BAD BOY")
-                  console.log("UH OH");
-                this.setY(obj.y + obj.bbox.max.y + this.radius + 0.01);
+                this.setY(obj.y + obj.bbox.max.y + this.radius + 0.1);
                 this.v.y *= -1;
               }
             } else if (obj.isSphere) {
@@ -37799,15 +37797,14 @@ void main() {
         }
       };
       var pause = false;
-      var ground_width = 5;
       var keys = {
         w: false,
         a: false,
         s: false,
         d: false,
+        r: false,
         shift: false,
-        space: false,
-        r: false
+        space: false
       };
       function init() {
         const canvas = renderer.domElement;
@@ -37833,14 +37830,16 @@ void main() {
         const ambientLight = new THREE.AmbientLight(16777215, 0.2);
         scene.add(ambientLight);
       }
+      var ground_width = 30;
+      var renderSpring = true;
       function addAllInitialObjects() {
-        const ball_radius = 0.5;
-        const width = 10;
-        const height = 1;
+        const ball_radius = 0.3;
+        const width = 20;
+        const height = 2;
         const depth = 10;
         const mass = 1;
         const start_v = new THREE.Vector3();
-        const dist = 2;
+        const dist = 3;
         const start_x = -width / 2 * dist - ball_radius;
         const start_y = 20;
         const start_z = -depth / 2 * dist - ball_radius;
@@ -37864,7 +37863,7 @@ void main() {
         objects = objects.map((obj) => {
           if (obj.name.substring(0, 4) === "FUCK") {
             const ballMesh = new THREE.Mesh(new THREE.SphereGeometry(ball_radius), new THREE.MeshStandardMaterial({ color: 16711680 }));
-            const new_ball = new ball_1.default(1, new THREE.Vector3(), ballMesh, false);
+            const new_ball = new ball_1.default(mass, new THREE.Vector3(Math.random() * 10 - 5, Math.random() * 10 - 5, Math.random() * 10 - 5), ballMesh, false);
             new_ball.setPosition(new THREE.Vector3(obj.x, obj.y, obj.z));
             scene.add(ballMesh);
             const arr = obj.name.split(" ");
@@ -37907,31 +37906,31 @@ void main() {
               let spring12 = null;
               let spring13 = null;
               if (ball_up)
-                spring1 = new spring_1.Spring(curr_ball, ball_up, utils_1.k, utils_1.c, scene);
+                spring1 = new spring_1.Spring(curr_ball, ball_up, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_right)
-                spring2 = new spring_1.Spring(curr_ball, ball_right, utils_1.k, utils_1.c, scene);
+                spring2 = new spring_1.Spring(curr_ball, ball_right, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in)
-                spring3 = new spring_1.Spring(curr_ball, ball_in, utils_1.k, utils_1.c, scene);
+                spring3 = new spring_1.Spring(curr_ball, ball_in, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_up_right)
-                spring4 = new spring_1.Spring(curr_ball, ball_up_right, utils_1.k, utils_1.c, scene);
+                spring4 = new spring_1.Spring(curr_ball, ball_up_right, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_down_right)
-                spring5 = new spring_1.Spring(curr_ball, ball_down_right, utils_1.k, utils_1.c, scene);
+                spring5 = new spring_1.Spring(curr_ball, ball_down_right, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in_up)
-                spring6 = new spring_1.Spring(curr_ball, ball_in_up, utils_1.k, utils_1.c, scene);
+                spring6 = new spring_1.Spring(curr_ball, ball_in_up, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in_down)
-                spring7 = new spring_1.Spring(curr_ball, ball_in_down, utils_1.k, utils_1.c, scene);
+                spring7 = new spring_1.Spring(curr_ball, ball_in_down, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in_right)
-                spring8 = new spring_1.Spring(curr_ball, ball_in_right, utils_1.k, utils_1.c, scene);
+                spring8 = new spring_1.Spring(curr_ball, ball_in_right, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in_left)
-                spring9 = new spring_1.Spring(curr_ball, ball_in_left, utils_1.k, utils_1.c, scene);
+                spring9 = new spring_1.Spring(curr_ball, ball_in_left, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in_up_right)
-                spring10 = new spring_1.Spring(curr_ball, ball_in_up_right, utils_1.k, utils_1.c, scene);
+                spring10 = new spring_1.Spring(curr_ball, ball_in_up_right, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_in_up_left)
-                spring11 = new spring_1.Spring(curr_ball, ball_in_up_left, utils_1.k, utils_1.c, scene);
+                spring11 = new spring_1.Spring(curr_ball, ball_in_up_left, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_out_up_right)
-                spring12 = new spring_1.Spring(curr_ball, ball_out_up_right, utils_1.k, utils_1.c, scene);
+                spring12 = new spring_1.Spring(curr_ball, ball_out_up_right, utils_1.k, utils_1.c, scene, renderSpring);
               if (ball_out_up_left)
-                spring13 = new spring_1.Spring(curr_ball, ball_out_up_left, utils_1.k, utils_1.c, scene);
+                spring13 = new spring_1.Spring(curr_ball, ball_out_up_left, utils_1.k, utils_1.c, scene, renderSpring);
               if (spring1)
                 springs.push(spring1);
               if (spring2)
@@ -37971,6 +37970,7 @@ void main() {
         );
         groundMesh.position.set(0, -1, 0);
         groundMesh.receiveShadow = true;
+        groundMesh.name = "GROUND";
         scene.add(groundMesh);
         const ground = new box_1.default(1, new THREE.Vector3(), groundMesh, true);
         ground.name = "GROUND";
@@ -37991,6 +37991,9 @@ void main() {
               break;
             case "d":
               keys.d = true;
+              break;
+            case "r":
+              keys.r = true;
               break;
             case "shift":
               keys.shift = true;
@@ -38014,14 +38017,14 @@ void main() {
             case "d":
               keys.d = false;
               break;
+            case "r":
+              keys.r = false;
+              break;
             case "shift":
               keys.shift = false;
               break;
             case " ":
               keys.space = false;
-              break;
-            case "r":
-              keys.r = true;
               break;
             case "p":
               pause = !pause;
@@ -38036,8 +38039,19 @@ void main() {
         controls.moveForward(z * utils_1.camera_speed * time.dt);
         controls.moveRight(x * utils_1.camera_speed * time.dt);
         camera.position.y += y * utils_1.camera_speed * time.dt;
-        if (keys.r)
-          window.location.reload();
+        if (keys.r) {
+          for (let i = scene.children.length - 1; i >= 0; i--) {
+            const obj = scene.children[i];
+            if (obj instanceof THREE.Mesh) {
+              obj.geometry.dispose();
+            }
+            scene.remove(obj);
+          }
+          objects = [];
+          springs = [];
+          addAllInitialObjects();
+          addGround();
+        }
       }
       init();
       renderer.setAnimationLoop(() => {

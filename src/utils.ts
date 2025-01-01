@@ -2,11 +2,11 @@ import { Box3, Sphere, Vector3 } from "three";
 import Ball from "./ball";
 import PhysicsObject from "./physicsObject";
 
-export const g = 5;
+export const g = 10;
 export const camera_speed = 30;
 export const dt = 0.01;
 export const k = 500;
-export const c = 5;
+export const c = 10;
 
 export function boxAndBallCollisionDetect(box: PhysicsObject, ball: Ball) : boolean {
     // TODO -- it should be similar to the 2d rect and circle collision detect

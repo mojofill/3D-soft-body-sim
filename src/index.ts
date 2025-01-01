@@ -19,7 +19,7 @@ scene.add(controls.object);
 
 // list of objects
 let objects: PhysicsObject[] = []; // ONLY REASON WHY THIS IS NOT A CONST IS BECAUSE OF A RETARDED BUG
-const springs: Spring[] = [];
+let springs: Spring[] = [];
 
 // CONSTANTS -- might move this to utils
 
@@ -36,16 +36,15 @@ const time = {
 };
 
 let pause = false;
-const ground_width = 5;
 
 const keys = {
     w: false,
     a: false,
     s: false,
     d: false,
+    r: false,
     shift: false,
     space: false,
-    r: false
 };
 
 function init() {
@@ -88,14 +87,17 @@ function addLighting() {
     scene.add(ambientLight);
 }
 
+const ground_width = 30;
+const renderSpring = true;
+
 function addAllInitialObjects() {
-    const ball_radius = 0.5;
-    const width = 10;
-    const height = 1;
+    const ball_radius = 0.3;
+    const width = 20;
+    const height = 2;
     const depth = 10;
     const mass = 1;
     const start_v = new THREE.Vector3();
-    const dist = 2;
+    const dist = 3;
     const start_x = -width/2 * dist - ball_radius;
     const start_y = 20;
     const start_z = -depth/2 * dist - ball_radius;
@@ -134,7 +136,8 @@ function addAllInitialObjects() {
                 new THREE.SphereGeometry(ball_radius),
                 new THREE.MeshStandardMaterial({color: 0xff0000})
             );
-            const new_ball = new Ball(1, new THREE.Vector3(), ballMesh, false);
+            // const new_ball = new Ball(1, new THREE.Vector3(), ballMesh, false);
+            const new_ball = new Ball(mass, new THREE.Vector3(Math.random() * 10 - 5, Math.random() * 10 - 5, Math.random() * 10 - 5), ballMesh, false);
             new_ball.setPosition(new THREE.Vector3(obj.x, obj.y, obj.z));
             scene.add(ballMesh);
 
@@ -195,19 +198,19 @@ function addAllInitialObjects() {
                 let spring12 = null; // this and out_up_right
                 let spring13 = null; // this and out_up_left
                     
-                if (ball_up) spring1 = new Spring(curr_ball, ball_up, k , c, scene);
-                if (ball_right) spring2 = new Spring(curr_ball, ball_right, k, c, scene);
-                if (ball_in) spring3 = new Spring(curr_ball, ball_in, k, c, scene);
-                if (ball_up_right) spring4 = new Spring(curr_ball, ball_up_right, k, c, scene);
-                if (ball_down_right) spring5 = new Spring(curr_ball, ball_down_right, k, c, scene);
-                if (ball_in_up) spring6 = new Spring(curr_ball, ball_in_up, k, c, scene);
-                if (ball_in_down) spring7 = new Spring(curr_ball, ball_in_down, k, c, scene);
-                if (ball_in_right) spring8 = new Spring(curr_ball, ball_in_right, k, c, scene);
-                if (ball_in_left) spring9 = new Spring(curr_ball, ball_in_left, k, c, scene);
-                if (ball_in_up_right) spring10 = new Spring(curr_ball, ball_in_up_right, k, c, scene);
-                if (ball_in_up_left) spring11 = new Spring(curr_ball, ball_in_up_left, k, c, scene);
-                if (ball_out_up_right) spring12 = new Spring(curr_ball, ball_out_up_right, k, c, scene);
-                if (ball_out_up_left) spring13 = new Spring(curr_ball, ball_out_up_left, k, c, scene);
+                if (ball_up) spring1 = new Spring(curr_ball, ball_up, k , c, scene, renderSpring);
+                if (ball_right) spring2 = new Spring(curr_ball, ball_right, k, c, scene, renderSpring);
+                if (ball_in) spring3 = new Spring(curr_ball, ball_in, k, c, scene, renderSpring);
+                if (ball_up_right) spring4 = new Spring(curr_ball, ball_up_right, k, c, scene, renderSpring);
+                if (ball_down_right) spring5 = new Spring(curr_ball, ball_down_right, k, c, scene, renderSpring);
+                if (ball_in_up) spring6 = new Spring(curr_ball, ball_in_up, k, c, scene, renderSpring);
+                if (ball_in_down) spring7 = new Spring(curr_ball, ball_in_down, k, c, scene, renderSpring);
+                if (ball_in_right) spring8 = new Spring(curr_ball, ball_in_right, k, c, scene, renderSpring);
+                if (ball_in_left) spring9 = new Spring(curr_ball, ball_in_left, k, c, scene, renderSpring);
+                if (ball_in_up_right) spring10 = new Spring(curr_ball, ball_in_up_right, k, c, scene, renderSpring);
+                if (ball_in_up_left) spring11 = new Spring(curr_ball, ball_in_up_left, k, c, scene, renderSpring);
+                if (ball_out_up_right) spring12 = new Spring(curr_ball, ball_out_up_right, k, c, scene, renderSpring);
+                if (ball_out_up_left) spring13 = new Spring(curr_ball, ball_out_up_left, k, c, scene, renderSpring);
 
                 if (spring1) springs.push(spring1);
                 if (spring2) springs.push(spring2);
@@ -236,6 +239,7 @@ function addGround() {
     )
     groundMesh.position.set(0, -1, 0);
     groundMesh.receiveShadow = true;
+    groundMesh.name = "GROUND";
     scene.add(groundMesh);
 
     const ground = new Box(1, new THREE.Vector3(), groundMesh, true);
@@ -261,6 +265,9 @@ function addEventListeners() {
             case "d":
                 keys.d = true;
                 break;
+            case "r":
+                keys.r = true;
+                break;
             case "shift":
                 keys.shift = true;
                 break;
@@ -283,14 +290,14 @@ function addEventListeners() {
             case "d":
                 keys.d = false;
                 break;
+            case "r":
+                keys.r = false;
+                break;
             case "shift":
                 keys.shift = false;
                 break;
             case " ":
                 keys.space = false;
-                break;
-            case "r":
-                keys.r = true;
                 break;
             case "p":
                 pause = !pause;
@@ -310,7 +317,21 @@ function keyFunctions() {
     controls.moveRight(x * camera_speed * time.dt);
     camera.position.y += y * camera_speed * time.dt;
 
-    if (keys.r) window.location.reload();
+    if (keys.r) {
+        for(let i = scene.children.length - 1; i >= 0; i--) { 
+            const obj = scene.children[i];
+            if (obj instanceof THREE.Mesh) {
+                obj.geometry.dispose();
+                obj.material.dispose();
+            }
+            scene.remove(obj);
+        }
+        
+        objects = [];
+        springs = [];
+        addAllInitialObjects();
+        addGround();
+    }
 }
 
 init();
